@@ -15,18 +15,14 @@ import com.corporateib.androidarchitecurecourselearn.model.Question
  * Last modified $file.lastModified
  */
 class QuestionListViewMvc(layoutInflater: LayoutInflater, parent: ViewGroup?) :
-    QuestionListAdapter.QuestionClickListener {
-
-    interface Listener {
-        fun onQuestionClicked(question: Question)
-    }
+    QuestionListAdapter.QuestionClickListener, QuestionListViewMvcImpl {
 
     private var mQuestionList: ListView
     private var mQuestionListAdapter: QuestionListAdapter
 
     private var mRootView: View
 
-    private val mListeners = ArrayList<Listener>(1)
+    private val mListeners = ArrayList<QuestionListViewMvcImpl.Listener>(1)
 
     init {
         mRootView = layoutInflater.inflate(R.layout.activity_question_list, parent, false)
@@ -35,19 +31,19 @@ class QuestionListViewMvc(layoutInflater: LayoutInflater, parent: ViewGroup?) :
         mQuestionList.adapter = mQuestionListAdapter
     }
 
-    fun registerListener(listener: Listener) {
+    override fun registerListener(listener: QuestionListViewMvcImpl.Listener) {
         mListeners.add(listener)
     }
 
-    fun unregisterListener(listener: Listener) {
+    override fun unregisterListener(listener: QuestionListViewMvcImpl.Listener) {
         mListeners.remove(listener)
     }
 
-    private fun getContext() = getRootView().context
+    override fun getContext() = getRootView().context
 
-    private fun <T: View> findViewById(id: Int) = getRootView().findViewById<T>(id)
+    override fun <T: View> findViewById(id: Int) = getRootView().findViewById<T>(id)
 
-    fun getRootView() = this.mRootView
+    override fun getRootView() = this.mRootView
 
     override fun onQuestionClicked(question: Question) {
         for(listener in mListeners) {
@@ -55,7 +51,7 @@ class QuestionListViewMvc(layoutInflater: LayoutInflater, parent: ViewGroup?) :
         }
     }
 
-    fun bindQuestions(questions: List<Question>) {
+    override fun bindQuestions(questions: List<Question>) {
         mQuestionListAdapter.clear()
         mQuestionListAdapter.addAll(questions)
         mQuestionListAdapter.notifyDataSetChanged()

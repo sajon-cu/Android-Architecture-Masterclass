@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  * sajon@syftet.com
  * Last modified $file.lastModified
  */
-class QuestionListActivity : BaseActivity(), QuestionListViewMvc.Listener {
+class QuestionListActivity : BaseActivity(), QuestionListViewMvcImpl.Listener {
     private var mStackoverflowApi: StackoverflowApi? = null
     private lateinit var mViewMvc: QuestionListViewMvc
 
