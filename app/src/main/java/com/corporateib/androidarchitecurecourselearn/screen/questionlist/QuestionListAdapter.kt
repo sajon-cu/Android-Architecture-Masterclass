@@ -28,11 +28,17 @@ class QuestionListAdapter(
 
         if(mConvertView == null) {
             mConvertView = LayoutInflater.from(parent.context).inflate(R.layout.question_list_item, parent, false)
+            val viewHolder = ViewHolder()
+            viewHolder.textView = mConvertView.findViewById(R.id.txt_title)
+            mConvertView.tag = viewHolder
         }
 
         val question = getItem(position)!!
-        val txtTitle = mConvertView?.findViewById<TextView>(R.id.txt_title)
-        txtTitle?.text= question.title
+        // val txtTitle = mConvertView?.findViewById<TextView>(R.id.txt_title)
+        // txtTitle?.text= question.title
+
+        val viewHolder = mConvertView?.tag as ViewHolder
+        viewHolder.textView?.text = question.title
 
         mConvertView?.setOnClickListener {
             onQuestionClicked(question)
@@ -44,5 +50,11 @@ class QuestionListAdapter(
 
     private fun onQuestionClicked(question: Question) {
         listener?.onQuestionClicked(question)
+    }
+
+    companion object {
+        class ViewHolder() {
+            var textView: TextView? = null
+        }
     }
 }
