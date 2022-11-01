@@ -1,6 +1,7 @@
 package com.corporateib.androidarchitecurecourselearn.screen.questionlist
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.ListView
 import android.widget.Toast
 import com.corporateib.androidarchitecurecourselearn.R
@@ -19,25 +20,23 @@ import retrofit2.converter.gson.GsonConverterFactory
  * sajon@syftet.com
  * Last modified $file.lastModified
  */
-class QuestionListActivity : BaseActivity(), QuestionListAdapter.QuestionClickListener {
-    private lateinit var mQuestionList: ListView
-    private lateinit var mQuestionListAdapter: QuestionListAdapter
-
+class QuestionListActivity : BaseActivity(), QuestionListViewMvc.Listener {
     private var mStackoverflowApi: StackoverflowApi? = null
+    private lateinit var mViewMvc: QuestionListViewMvc
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_question_list)
 
-        mQuestionList = findViewById(R.id.lst_items)
-        mQuestionListAdapter = QuestionListAdapter(this, this)
-        mQuestionList.adapter = mQuestionListAdapter
+        mViewMvc = QuestionListViewMvc(LayoutInflater.from(this), null)
+        mViewMvc.registerListener(this)
 
         mStackoverflowApi = Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(StackoverflowApi::class.java)
+
+        setContentView(mViewMvc.getRootView())
     }
 
     override fun onStart() {
@@ -77,12 +76,10 @@ class QuestionListActivity : BaseActivity(), QuestionListAdapter.QuestionClickLi
             }
         }
 
-        mQuestionListAdapter.clear()
-        mQuestionListAdapter.addAll(questions)
-        mQuestionListAdapter.notifyDataSetChanged()
+        mViewMvc.bindQuestions(questions)
     }
 
-    override fun onQuestionClicked(question: Question?) {
-        Toast.makeText(this, question?.title, Toast.LENGTH_SHORT).show()
+    override fun onQuestionClicked(question: Question) {
+        Toast.makeText(this, question.title, Toast.LENGTH_SHORT).show()
     }
 }

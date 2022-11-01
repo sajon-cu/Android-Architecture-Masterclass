@@ -20,7 +20,7 @@ class QuestionListAdapter(
     private val listener: QuestionClickListener? = null
 ) : ArrayAdapter<Question>(context, 0) {
     interface QuestionClickListener {
-        fun onQuestionClicked(question: Question?)
+        fun onQuestionClicked(question: Question)
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -30,9 +30,9 @@ class QuestionListAdapter(
             mConvertView = LayoutInflater.from(parent.context).inflate(R.layout.question_list_item, parent, false)
         }
 
-        val question = getItem(position)
+        val question = getItem(position)!!
         val txtTitle = mConvertView?.findViewById<TextView>(R.id.txt_title)
-        txtTitle?.text= question?.title
+        txtTitle?.text= question.title
 
         mConvertView?.setOnClickListener {
             onQuestionClicked(question)
@@ -42,7 +42,7 @@ class QuestionListAdapter(
         return mConvertView!!
     }
 
-    private fun onQuestionClicked(question: Question?) {
+    private fun onQuestionClicked(question: Question) {
         listener?.onQuestionClicked(question)
     }
 }
