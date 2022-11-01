@@ -27,7 +27,7 @@ class QuestionListAdapter(
         var mConvertView = convertView
 
         if(mConvertView == null) {
-            val viewMvc: QuestionListItemViewMvc = QuestionListItemViewMvcImpl(
+            val viewMvc = QuestionListItemViewMvcImpl(
                 LayoutInflater.from(context),
                 parent
             )

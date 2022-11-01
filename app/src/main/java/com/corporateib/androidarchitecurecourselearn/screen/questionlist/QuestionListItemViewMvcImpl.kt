@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.corporateib.androidarchitecurecourselearn.R
 import com.corporateib.androidarchitecurecourselearn.model.Question
+import com.corporateib.androidarchitecurecourselearn.screen.common.BaseObservableViewMvc
 import com.corporateib.androidarchitecurecourselearn.screen.common.BaseViewMvc
 
 /**
@@ -14,10 +15,11 @@ import com.corporateib.androidarchitecurecourselearn.screen.common.BaseViewMvc
  * sajon@syftet.com
  * Last modified $file.lastModified
  */
-class QuestionListItemViewMvcImpl(inflater: LayoutInflater, parent: ViewGroup) : BaseViewMvc(), QuestionListItemViewMvc {
+class QuestionListItemViewMvcImpl(
+    inflater: LayoutInflater, parent: ViewGroup
+) : BaseObservableViewMvc<QuestionListItemViewMvc.Listener>(), QuestionListItemViewMvc {
     private var mTextView: TextView
     private lateinit var mQuestion: Question
-    private val mListeners = ArrayList<QuestionListItemViewMvc.Listener>(1)
 
     init {
         setRootView(inflater.inflate(R.layout.question_list_item, parent, false))
@@ -25,7 +27,7 @@ class QuestionListItemViewMvcImpl(inflater: LayoutInflater, parent: ViewGroup) :
         mTextView = findViewById(R.id.txt_title)
 
         getRootView().setOnClickListener {
-            for(listener in mListeners) {
+            for(listener in getListeners()) {
                 listener.onQuestionClicked(mQuestion)
             }
         }
@@ -34,13 +36,5 @@ class QuestionListItemViewMvcImpl(inflater: LayoutInflater, parent: ViewGroup) :
     override fun bindQuestion(question: Question) {
         mQuestion = question
         mTextView.text = question.title
-    }
-
-    override fun registerListener(listener: QuestionListItemViewMvc.Listener) {
-        mListeners.add(listener)
-    }
-
-    override fun unregisterListener(listener: QuestionListItemViewMvc.Listener) {
-        mListeners.remove(listener)
     }
 }
