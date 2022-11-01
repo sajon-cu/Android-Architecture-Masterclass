@@ -2,7 +2,6 @@ package com.corporateib.androidarchitecurecourselearn.screen.questionlist
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.ListView
 import android.widget.Toast
 import com.corporateib.androidarchitecurecourselearn.R
 import com.corporateib.androidarchitecurecourselearn.common.Constants
@@ -20,14 +19,14 @@ import retrofit2.converter.gson.GsonConverterFactory
  * sajon@syftet.com
  * Last modified $file.lastModified
  */
-class QuestionListActivity : BaseActivity(), QuestionListViewMvcImpl.Listener {
+class QuestionListActivity : BaseActivity(), QuestionListViewMvc.Listener {
     private var mStackoverflowApi: StackoverflowApi? = null
     private lateinit var mViewMvc: QuestionListViewMvc
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mViewMvc = QuestionListViewMvc(LayoutInflater.from(this), null)
+        mViewMvc = QuestionListViewMvcImpl(LayoutInflater.from(this), null)
         mViewMvc.registerListener(this)
 
         mStackoverflowApi = Retrofit.Builder()

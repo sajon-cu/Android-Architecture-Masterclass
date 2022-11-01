@@ -2,6 +2,8 @@ package com.corporateib.androidarchitecurecourselearn.screen.questionlist
 
 import android.view.View
 import com.corporateib.androidarchitecurecourselearn.model.Question
+import com.corporateib.androidarchitecurecourselearn.screen.common.ObservableViewMvc
+import com.corporateib.androidarchitecurecourselearn.screen.common.ViewMvc
 
 /**
  * Created by sajon on 11/1/22
@@ -9,13 +11,10 @@ import com.corporateib.androidarchitecurecourselearn.model.Question
  * sajon@syftet.com
  * Last modified $file.lastModified
  */
-interface QuestionListItemViewMvc {
+interface QuestionListItemViewMvc : ObservableViewMvc<QuestionListItemViewMvc.Listener> {
     interface Listener {
         fun onQuestionClicked(question: Question)
     }
 
     fun bindQuestion(question: Question)
-    fun getRootView(): View
-    fun registerListener(listener: Listener)
-    fun unregisterListener(listener: Listener)
 }
