@@ -18,7 +18,7 @@ import com.corporateib.androidarchitecurecourselearn.model.Question
 class QuestionListAdapter(
     context: Context,
     private val listener: QuestionClickListener? = null
-) : ArrayAdapter<Question>(context, 0) {
+) : ArrayAdapter<Question>(context, 0), QuestionListItemViewMvc.Listener {
     interface QuestionClickListener {
         fun onQuestionClicked(question: Question)
     }
@@ -27,34 +27,24 @@ class QuestionListAdapter(
         var mConvertView = convertView
 
         if(mConvertView == null) {
-            mConvertView = LayoutInflater.from(parent.context).inflate(R.layout.question_list_item, parent, false)
-            val viewHolder = ViewHolder()
-            viewHolder.textView = mConvertView.findViewById(R.id.txt_title)
-            mConvertView.tag = viewHolder
+            val viewMvc: QuestionListItemViewMvc = QuestionListItemViewMvcImpl(
+                LayoutInflater.from(context),
+                parent
+            )
+
+            viewMvc.registerListener(this)
+            mConvertView = viewMvc.getRootView()
+            mConvertView.tag = viewMvc
         }
 
         val question = getItem(position)!!
-        // val txtTitle = mConvertView?.findViewById<TextView>(R.id.txt_title)
-        // txtTitle?.text= question.title
+        val viewMvc = mConvertView.tag as QuestionListItemViewMvc
+        viewMvc.bindQuestion(question)
 
-        val viewHolder = mConvertView?.tag as ViewHolder
-        viewHolder.textView?.text = question.title
-
-        mConvertView?.setOnClickListener {
-            onQuestionClicked(question)
-        }
-
-        // return super.getView(position, convertView, parent)
-        return mConvertView!!
+        return mConvertView
     }
 
-    private fun onQuestionClicked(question: Question) {
+    override fun onQuestionClicked(question: Question) {
         listener?.onQuestionClicked(question)
-    }
-
-    companion object {
-        class ViewHolder() {
-            var textView: TextView? = null
-        }
     }
 }
